@@ -8,7 +8,10 @@ public class Student {
     @Id
     @GeneratedValue
     private long id;
-@Column(name = "name", nullable = true)
+
+
+    @Column(name = "student_name" , nullable= true)
+
     private String name;
     private String surname;
     private String email;
