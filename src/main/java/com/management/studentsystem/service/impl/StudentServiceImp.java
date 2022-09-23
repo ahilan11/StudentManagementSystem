@@ -29,16 +29,19 @@ public class StudentServiceImp implements StudentService {
     @Override
     public Student updateStudent(Student student, long id) {
         Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student","Id",id));
-        existingStudent.
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setName(student.getName());
+        existingStudent.setSurname(student.getSurname());
+        return studentRepository.save(existingStudent);
     }
 
     @Override
     public Student getStudentById(long id) {
-        return null;
+        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student","Id",id));
     }
 
     @Override
     public List<Student> getAllStudents() {
-        return null;
+        return studentRepository.findAll();
     }
 }
