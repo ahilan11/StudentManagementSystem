@@ -1,16 +1,13 @@
 package com.management.studentsystem.service;
 
 import com.management.studentsystem.entity.Student;
-import com.management.studentsystem.repository.StudentRepository;
 
-public class StudentService {
-    StudentRepository studentRepository;
+import java.util.List;
 
-    public StudentService(StudentRepository studentRepository){
-        this.studentRepository = studentRepository;
-    }
-
-    public Student addStudent(Student student){
-        return studentRepository.save(student);
-    }
+public interface StudentService {
+    Student addStudent(Student student);
+    void deleteStudent(long id);
+    Student updateStudent(Student student, long id);
+    Student getStudentById(long id);
+    List<Student> getAllStudents();
 }
