@@ -1,11 +1,14 @@
 package com.management.studentsystem.service.impl;
 
 import com.management.studentsystem.entity.Student;
+import com.management.studentsystem.exception.StudentNotFoundException;
 import com.management.studentsystem.repository.StudentRepository;
 import com.management.studentsystem.service.StudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StudentServiceImp implements StudentService {
     StudentRepository studentRepository;
@@ -19,12 +22,14 @@ public class StudentServiceImp implements StudentService {
     }
     @Override
     public void deleteStudent(long id){
-        studentRepository.findById(id).
+        studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student","Id",id));
+        studentRepository.deleteById(id);
     }
 
     @Override
     public Student updateStudent(Student student, long id) {
-        return null;
+        Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student","Id",id));
+        existingStudent.
     }
 
     @Override

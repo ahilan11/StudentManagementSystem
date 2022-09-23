@@ -10,7 +10,7 @@ public class StudentNotFoundException extends RuntimeException{
     String fieldName;
     Object fieldValue;
 
-    public StudentNotFoundException(String resourceName, String fieldName, String fieldValue){
+    public StudentNotFoundException(String resourceName, String fieldName, Object fieldValue){
         super(String.format("%s not found with %s : '%s'",resourceName,fieldName, fieldValue));
         this.resourceName = resourceName;
         this.fieldName = fieldName;
