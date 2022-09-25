@@ -4,12 +4,13 @@ import com.management.studentsystem.entity.Student;
 import com.management.studentsystem.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("api/student")
+@Controller
 public class StudentController {
 
     StudentService studentService;
@@ -17,17 +18,32 @@ public class StudentController {
     public StudentController(StudentService studentService){
         this.studentService = studentService;
     }
-    @RequestMapping("addStudent")
-    @PostMapping()
-    public ResponseEntity<Student> addStudent(@RequestBody Student stud){
-        return new ResponseEntity<>(studentService.addStudent(stud), HttpStatus.CREATED);
+    @GetMapping("students/new")
+    public String saveStudentForm( Model model){
+        Student student = new Student();
+        model.addAttribute("student",student);
+        return "create_student";
     }
 
-    @RequestMapping("updateStudent/{id}")
-    @PutMapping()
-    public ResponseEntity<Student> updateStudent(@RequestBody Student stud, @PathVariable("id") long id){
-        return new ResponseEntity<>(studentService.updateStudent(stud,id), HttpStatus.OK);
+    @PostMapping("students")
+    public String saveStudent(@ModelAttribute("student") Student student){
+studentService.addStudent(student);
+return "redirect:/getAllStudents";
     }
+
+ @GetMapping("students/edit/{id}")
+ public String updateStudent(@PathVariable Long id, Model model){
+       Student student = studentService.getStudentById(id);
+
+       model.addAttribute("student",student);
+       return "edit_student";
+ }
+
+ @PostMapping("students/{id}")
+        public String updateStudent(@PathVariable("id") Long id, @ModelAttribute("student") Student student, Model model){
+studentService.updateStudent(student,id);
+return "redirect:/getAllStudents";
+     }
 
     @RequestMapping("getStudent/{id}")
     @GetMapping()
@@ -35,16 +51,15 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.FOUND);
     }
 
-    @RequestMapping("getAllStudents")
-    @GetMapping()
-    public ResponseEntity<List<Student>> getStudent(){
-        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.FOUND);
+    @GetMapping("getAllStudents")
+    public String listStudents(Model model){
+        model.addAttribute("students",studentService.getAllStudents());
+        return "students";
     }
 
-    @RequestMapping("deleteStudent/{id}")
-    @DeleteMapping()
-    public ResponseEntity<String> deleteStudent(@PathVariable("id") long id){
+    @GetMapping("students/delete/{id}")
+    public String deleteStudent(@PathVariable("id") long id, Model model){
          studentService.deleteStudent(id);
-         return new ResponseEntity<>("Student was successfully deleted", HttpStatus.OK);
+         return "redirect:/getAllStudents";
     }
 }
